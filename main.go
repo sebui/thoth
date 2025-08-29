@@ -31,9 +31,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	readManyFilesToolImpl := &tools.ReadManyFilesTool{ProjectRoot: projectRoot}
 	runShellCommandToolImpl := &tools.RunShellCommandTool{ProjectRoot: projectRoot}
 
 	toolRegistry := make(map[string]tools.Tool)
+	toolRegistry[readManyFilesToolImpl.Declaration().Name] = readManyFilesToolImpl
 	toolRegistry[runShellCommandToolImpl.Declaration().Name] = runShellCommandToolImpl
 
 	var functionDeclarations []*genai.FunctionDeclaration
