@@ -13,6 +13,10 @@ import (
 )
 
 func main() {
+	projectRoot, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Failed to get current working directory: %v", err)
+	}
 	ctx := context.Background()
 	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
@@ -27,7 +31,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	runShellCommandToolImpl := &tools.RunShellCommandTool{ProjectRoot: projectRoot}
+
 	toolRegistry := make(map[string]tools.Tool)
+	toolRegistry[runShellCommandToolImpl.Declaration().Name] = runShellCommandToolImpl
 
 	var functionDeclarations []*genai.FunctionDeclaration
 	for _, tool := range toolRegistry {
